@@ -7,15 +7,39 @@ const clearLapsBtn = document.getElementById('clearLapsBtn');
 const lapListContainer = document.getElementById('lapList');
 const lapCounterSpan = document.getElementById('lapCounter');
 
+let secondsEl = 0
+let minutesEl = 0
+let hoursEl = 0
+let time = `${hoursEl} : ${minutesEl} : ${secondsEl}`
 let timerCount = 0;
 let intervalTimer;
 let lapCount = 1;
 let lapArr = []
 
+const addZero = (num) => {
+    return String(num).padStart(2, "0")
+}
+
+
 const startTimer = () => {
-    timerElement.innerHTML = timerCount++
     intervalTimer = setInterval(() => {
-        timerElement.innerHTML = timerCount++
+
+        upsecondsEl = secondsEl++
+
+        if (upsecondsEl > 58) {
+            secondsEl = 0
+            upminutesEl = minutesEl++
+            if (upminutesEl > 58) {
+                minutesEl = 0
+                hoursEl++
+            }
+
+        }
+
+        console.log(time)
+
+        time = `${addZero(hoursEl)} : ${addZero(minutesEl)} : ${addZero(secondsEl)}`
+        timerDisplay.innerHTML = `${time}`
     }, 1000)
 }
 
@@ -24,7 +48,11 @@ const pauseTimer = () => {
 }
 
 const resetTimer = () => {
-    timerElement.innerHTML = '0'
+    secondsEl = 0
+    minutesEl = 0
+    hoursEl = 0
+    time = `${addZero(hoursEl)} : ${addZero(minutesEl)} : ${addZero(secondsEl)}`
+    timerElement.innerText = `${time}`
     timerCount = 0
     clearInterval(intervalTimer)
 }
@@ -71,7 +99,7 @@ const showLaps = (data) => {
     })
 
     lapListContainer.lastChild.classList.add('lap-new-item')
-    
+
 }
 
 startBtn.addEventListener(('click'), startTimer);
